@@ -9,4 +9,5 @@ deploy:
     secure: RBWZb5PE01Fi3/q2WWOxZS++AESph6XlqYT11vmA3ns6TTEXeJ//U68rnX3S5BMIzqBQeaFPOj7JQoyCJVp6ZNWl8xgHd81xK+W0aQiPR3Va2/HL35ilxedBcpjojGcnpaouhJuFSbpx2M7O0SLAOusbMyPv4S+goVJKzlFzJlA=
   on:
     tags: true
+    all_branches: true
     repo: bendrucker/hapi-raven
