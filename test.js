@@ -15,6 +15,12 @@ describe('hapi-raven', function () {
     server = new hapi.Server();
   });
 
+  var options = {
+    raven: {
+      dsn: 'dsn'
+    }
+  };
+
   describe('Initialization', function () {
 
     beforeEach(function () {
@@ -26,18 +32,25 @@ describe('hapi-raven', function () {
     });
 
     it('can be configured with the DSN directly', function (done) {
-      server.pack.require('.', 'dsn', function () {
+      server.pack.register({
+        plugin: require('./'),
+        options: {
+          raven: 'dsn'
+        }
+      },
+      function () {
         expect(raven.Client).to.have.been.calledWith('dsn', null);
         done();
       });
     });
 
     it('can be configured with options', function (done) {
-      var options = {
-        dsn: 'dsn'
-      };
-      server.pack.require('.', options, function () {
-        expect(raven.Client).to.have.been.calledWith('dsn', options);
+      server.pack.register({
+        plugin: require('./'),
+        options: options
+      },
+      function () {
+        expect(raven.Client).to.have.been.calledWith('dsn', options.raven);
         done();
       });
     });
@@ -49,7 +62,11 @@ describe('hapi-raven', function () {
     var client;
     beforeEach(function (done) {
       sinon.stub(raven, 'Client');
-      server.pack.require('.', 'dsn', function () {
+      server.pack.register({
+        plugin: require('./'),
+        options: options
+      },
+      function () {
         client = raven.Client.firstCall.returnValue;
         done();
       });

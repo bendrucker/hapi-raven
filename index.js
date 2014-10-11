@@ -1,13 +1,15 @@
 'use strict';
 
-var raven     = require('raven');
+var raven  = require('raven');
 
 exports.register = function (plugin, options, next) {
+  options = options.raven;
   var dsn;
   if (typeof options === 'string') {
     dsn = options;
     options = null;
-  } else {
+  }
+  else {
     dsn = options.dsn;
   }
   var client = new raven.Client(dsn, options);
@@ -21,4 +23,8 @@ exports.register = function (plugin, options, next) {
   });
 
   next();
+};
+
+exports.register.attributes = {
+  pkg: require('./package.json')
 };
