@@ -3,19 +3,8 @@
 var raven  = require('raven');
 
 exports.register = function (plugin, options, next) {
-  options = options.raven;
-  var dsn;
-  if (typeof options === 'string') {
-    dsn = options;
-    options = null;
-  }
-  else {
-    dsn = options.dsn;
-  }
-  var client = new raven.Client(dsn, options);
-
+  var client = new raven.Client(options.dsn, options.client);
   plugin.expose('client', client);
-
   plugin.events.on('internalError', function (request, err) {
     client.captureError(err, {
       request: request

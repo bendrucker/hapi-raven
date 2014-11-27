@@ -5,10 +5,10 @@ A Hapi plugin for sending exceptions to Sentry through Raven.
 
 ## Setup
 
-Pass plugins options as `options.raven`. You can pass:
+Options:
 
-* **`string`**: Your Sentry DSN
-* **`object`**: An object with property `dsn` (required). This object will be passed directly to [raven-node](https://github.com/getsentry/raven-node). It [parses options](https://github.com/getsentry/raven-node/blob/master/lib/client.js#L27-L33) for `name`, `site`, `root`, `transport`, `logger`, and `dataCallback`.
+* **`dsn`**: Your Sentry DSN (required)
+* **`client`**: An options object that will be passed directly to the client as its second argument (optional)
 
 Note that DSN configuration using `process.env` is not supported. If you wish to replicate the [default environment variable behavior](https://github.com/getsentry/raven-node/blob/master/lib/client.js#L21), you'll need to supply the value directly:
 
@@ -16,7 +16,7 @@ Note that DSN configuration using `process.env` is not supported. If you wish to
 pack.register({
   plugin: require('hapi-raven'),
   options: {
-    raven: process.env.SENTRY_DSN
+    dsn: process.env.SENTRY_DSN
   }
 });
 ```
