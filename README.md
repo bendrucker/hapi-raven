@@ -25,7 +25,7 @@ pack.register({
 
 Once you register the plugin on a pack, logging will happen automatically. 
 
-The plugin listens for [`'internalError'` events](http://hapijs.com/api#server-events) on your pack which are "emitted whenever an Internal Server Error (500) error response is sent."
+The plugin listens for [`'internalError'` events](http://hapijs.com/api#server-events) on your pack which are emitted any time `reply` is called with an error where `err.isBoom === false`.
 
 --------------
 

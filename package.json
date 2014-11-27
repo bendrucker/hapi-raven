@@ -17,6 +17,7 @@
     "hapi": "6 || 7"
   },
   "devDependencies": {
+    "boom": "~2.6.1",
     "chai": "1",
     "hapi": "7",
     "mocha": "1",
