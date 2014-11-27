@@ -10,84 +10,52 @@ var sinon  = require('sinon');
 
 describe('hapi-raven', function () {
 
-  var server;
+  var server, error;
   beforeEach(function () {
     server = new hapi.Server();
+    error  = new Error();
+    server.route({
+      method: 'GET',
+      path: '/',
+      handler: function (request, reply) {
+        reply(error);
+      }
+    })
   });
 
-  var options = {
-    raven: {
-      dsn: 'dsn'
-    }
-  };
+  function register (options) {
+    server.pack.register({
+      plugin: require('./'),
+      options: options || {
+        dsn: 'dsn'
+      }
+    }, function (err) {
+      if (err) throw err;
+    })
+  }
 
-  describe('Initialization', function () {
-
-    beforeEach(function () {
-      sinon.stub(raven, 'Client');
+  it('registers with the dsn and client options', function () {
+    sinon.stub(raven, 'Client');
+    var options = {};
+    register({
+      dsn: 'dsn',
+      client: options
     });
-
-    afterEach(function () {
-      raven.Client.restore();
-    });
-
-    it('can be configured with the DSN directly', function (done) {
-      server.pack.register({
-        plugin: require('./'),
-        options: {
-          raven: 'dsn'
-        }
-      },
-      function () {
-        expect(raven.Client).to.have.been.calledWith('dsn', null);
-        done();
-      });
-    });
-
-    it('can be configured with options', function (done) {
-      server.pack.register({
-        plugin: require('./'),
-        options: options
-      },
-      function () {
-        expect(raven.Client).to.have.been.calledWith('dsn', options.raven);
-        done();
-      });
-    });
-    
+    expect(raven.Client).to.have.been.calledWith('dsn', options);
+    raven.Client.restore();
   });
 
-  describe('Usage', function () {
-
-    var client;
-    beforeEach(function (done) {
-      sinon.stub(raven, 'Client');
-      server.pack.register({
-        plugin: require('./'),
-        options: options
-      },
-      function () {
-        client = raven.Client.firstCall.returnValue;
-        done();
-      });
+  it('captures internal errors', function (done) {
+    var capture = sinon.spy();
+    sinon.stub(raven, 'Client').returns({
+      captureError: capture
     });
-
-    afterEach(function () {
+    register();
+    server.inject('/', function () {
+      expect(capture).to.have.been.calledWith(error);
       raven.Client.restore();
+      done();
     });
-
-    it('sends internal errors with the request', function (done) {
-      var err = new Error();
-      var request = {};
-      client.captureError = sinon.spy(function () {
-        expect(client.captureError).to.have.been.calledWith(err, {
-          request: request
-        });
-        done();
-      });
-      server.emit('internalError', request, err);
-    });
-
   });
 
 });
