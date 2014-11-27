@@ -25,7 +25,7 @@ pack.register({
 
 Once you register the plugin on a pack, logging will happen automatically. 
 
-The plugin listens for [`'internalError'` events](http://hapijs.com/api#server-events) on your pack which are emitted any time `reply` is called with an error where `err.isBoom === false`.
+The plugin listens for [`'internalError'` events](http://hapijs.com/api#server-events) on your pack which are emitted any time `reply` is called with an error where `err.isBoom === false`. Note that the `'internalError'` event is emitted for all thrown exceptions and passed errors that are not Boom errors. Transforming an error at an extension point (e.g. `'onPostHandler'` or `'onPreResponse'`) into a Boom error will not prevent the event from being emitted on response. 
 
 --------------
 
