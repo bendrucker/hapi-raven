@@ -33,7 +33,7 @@ describe('hapi-raven', function () {
 
   function register (options) {
     server.pack.register({
-      plugin: require('./'),
+      plugin: require('../'),
       options: options || {
         dsn: 'dsn'
       }
