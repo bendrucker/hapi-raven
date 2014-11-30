@@ -14,15 +14,15 @@
     "raven": "0.7"
   },
   "peerDependencies": {
-    "hapi": "6 || 7"
+    "hapi": "^8.0.0-rc5"
   },
   "devDependencies": {
-    "boom": "~2.6.1",
-    "chai": "1",
-    "hapi": "7",
-    "mocha": "1",
-    "sinon": "1",
-    "sinon-chai": "2"
+    "boom": "^2.6.1",
+    "chai": "^1.10.0",
+    "hapi": "^8.0.0-rc5",
+    "mocha": "^2.0.1",
+    "sinon": "^1.12.1",
+    "sinon-chai": "^2.6.0"
   },
   "keywords": [
     "hapi",

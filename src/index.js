@@ -2,13 +2,12 @@
 
 var raven  = require('raven');
 
-exports.register = function (plugin, options, next) {
+exports.register = function (server, options, next) {
   var client = new raven.Client(options.dsn, options.client);
-  plugin.expose('client', client);
-  plugin.events.on('internalError', function (request, err) {
+  server.expose('client', client);
+  server.on('request-error', function (request, err) {
     client.captureError(err);
   });
-
   next();
 };
 

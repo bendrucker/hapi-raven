@@ -14,6 +14,7 @@ describe('hapi-raven', function () {
   var server, error;
   beforeEach(function () {
     server = new hapi.Server();
+    server.connection();
     error  = new Error();
     server.route({
       method: 'GET',
@@ -32,8 +33,8 @@ describe('hapi-raven', function () {
   });
 
   function register (options) {
-    server.pack.register({
-      plugin: require('../'),
+    server.register({
+      register: require('../'),
       options: options || {
         dsn: 'dsn'
       }
