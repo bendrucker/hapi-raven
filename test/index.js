@@ -60,7 +60,7 @@ describe('hapi-raven', function () {
     });
     register();
     server.inject('/', function () {
-      expect(capture).to.have.been.calledWith(error, sinon.match({
+      expect(capture).to.have.been.calledWith(error, sinon.match.has('extra', {
         timestamp: sinon.match.number,
         id: sinon.match.string,
         method: 'get',
