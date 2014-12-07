@@ -66,10 +66,8 @@ describe('hapi-raven', function () {
         method: 'get',
         path: '/',
         query: {},
-        source: {
-          remoteAddress: '',
-          userAgent: 'shot'
-        }
+        remoteAddress: '',
+        userAgent: 'shot'
       }));
       raven.Client.restore();
       done();

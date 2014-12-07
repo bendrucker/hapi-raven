@@ -13,10 +13,8 @@ exports.register = function (plugin, options, next) {
         method: request.method,
         path: request.path,
         query: request.query,
-        source: {
-          remoteAddress: request.info.remoteAddress,
-          userAgent: request.raw.req.headers['user-agent']
-        }
+        remoteAddress: request.info.remoteAddress,
+        userAgent: request.raw.req.headers['user-agent']
       }
     });
   });
