@@ -60,7 +60,17 @@ describe('hapi-raven', function () {
     });
     register();
     server.inject('/', function () {
-      expect(capture).to.have.been.calledWith(error);
+      expect(capture).to.have.been.calledWith(error, sinon.match({
+        timestamp: sinon.match.number,
+        id: sinon.match.string,
+        method: 'get',
+        path: '/',
+        query: {},
+        source: {
+          remoteAddress: '',
+          userAgent: 'shot'
+        }
+      }));
       raven.Client.restore();
       done();
     });
