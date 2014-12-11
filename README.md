@@ -13,8 +13,8 @@ Options:
 Note that DSN configuration using `process.env` is not supported. If you wish to replicate the [default environment variable behavior](https://github.com/getsentry/raven-node/blob/master/lib/client.js#L21), you'll need to supply the value directly:
 
 ```js
-pack.register({
-  plugin: require('hapi-raven'),
+server.register({
+  register: require('hapi-raven'),
   options: {
     dsn: process.env.SENTRY_DSN
   }
@@ -23,9 +23,9 @@ pack.register({
 
 ## Usage
 
-Once you register the plugin on a pack, logging will happen automatically. 
+Once you register the plugin on a server, logging will happen automatically. 
 
-The plugin listens for [`'internalError'` events](http://hapijs.com/api#server-events) on your pack which are emitted any time `reply` is called with an error where `err.isBoom === false`. Note that the `'internalError'` event is emitted for all thrown exceptions and passed errors that are not Boom errors. Transforming an error at an extension point (e.g. `'onPostHandler'` or `'onPreResponse'`) into a Boom error will not prevent the event from being emitted on response. 
+The plugin listens for [`'request-error'` events](http://hapijs.com/api#server-events) which are emitted any time `reply` is called with an error where `err.isBoom === false`. Note that the `'request-error'` event is emitted for all thrown exceptions and passed errors that are not Boom errors. Transforming an error at an extension point (e.g. `'onPostHandler'` or `'onPreResponse'`) into a Boom error will not prevent the event from being emitted on response. 
 
 --------------
 
@@ -77,13 +77,13 @@ server.inject('/throw', function (response) {
 
 -------------------------
 
-For convenience, hapi-raven [exposes](http://hapijs.com/api#pluginexposekey-value) the `node-raven` client on your server as `server.plugins['hapi-raven'].client`. If you want to capture errors other than those raised by `'internalError'`, you can use the client directly inside an [`'onPreResponse'`](http://hapijs.com/api#error-transformation) extension point.
+For convenience, hapi-raven [exposes](http://hapijs.com/api#pluginexposekey-value) the `node-raven` client on your server as `server.plugins.raven.client`. If you want to capture errors other than those raised by `'request-error'`, you can use the client directly inside an [`'onPreResponse'`](http://hapijs.com/api#error-transformation) extension point.
 
 ### Example: Capture all 404 errors
 ```js
 server.ext('onPreResponse', function (request, reply) {
   if (request.isBoom && request.response.statusCode === 404) {
-    server.plugins['hapi-raven'].client.captureError(request.response);
+    server.plugins.raven.client.captureError(request.response);
   }
 });
 ```
