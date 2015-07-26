@@ -23,6 +23,5 @@ exports.register = function (server, options, next) {
 };
 
 exports.register.attributes = {
-  name: 'raven',
-  version: require('../package.json').version
+  pkg: require('../package')
 };
