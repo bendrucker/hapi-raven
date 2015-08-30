@@ -14,12 +14,12 @@
     "raven": "0.7"
   },
   "peerDependencies": {
-    "hapi": "8"
+    "hapi": ">=8"
   },
   "devDependencies": {
     "boom": "~2.6.1",
     "chai": "1",
-    "hapi": "8",
+    "hapi": ">=8",
     "mocha": "1",
     "sinon": "1",
     "sinon-chai": "2"
