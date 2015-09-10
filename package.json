@@ -1,6 +1,6 @@
 {
   "name": "hapi-raven",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "A Hapi plugin for sending exceptions to Sentry through Raven",
   "main": "./src",
   "repository": {
@@ -14,12 +14,12 @@
     "raven": "0.7"
   },
   "peerDependencies": {
-    "hapi": "8"
+    "hapi": ">=8 <=9"
   },
   "devDependencies": {
     "boom": "~2.6.1",
     "chai": "1",
-    "hapi": "8",
+    "hapi": ">=8 <=9",
     "mocha": "1",
     "sinon": "1",
     "sinon-chai": "2"
