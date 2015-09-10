@@ -60,14 +60,14 @@ describe('hapi-raven', function () {
       captureError: capture
     });
     register();
-    server.inject('/', function () {
+    server.inject({url:'/', remoteAddress:'192.168.1.1'}, function () {
       expect(capture).to.have.been.calledWith(error, sinon.match.has('extra', {
         timestamp: sinon.match.number,
         id: sinon.match.string,
         method: 'get',
         path: '/',
         query: {},
-        remoteAddress: '',
+        remoteAddress: '192.168.1.1',
         userAgent: 'shot'
       }));
       raven.Client.restore();
