@@ -14,7 +14,7 @@
     "raven": "0.7"
   },
   "peerDependencies": {
-    "hapi": "8"
+    "hapi": ">= 8 <= 11"
   },
   "devDependencies": {
     "boom": "~2.6.1",
