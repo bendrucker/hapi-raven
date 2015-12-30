@@ -8,7 +8,8 @@
     "url": "https://github.com/bendrucker/hapi-raven.git"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "test-peer-range hapi",
+    "test-main": "mocha"
   },
   "dependencies": {
     "raven": "0.7"
@@ -21,8 +22,10 @@
     "chai": "1",
     "hapi": "^11.0.0",
     "mocha": "1",
+    "semver": "~5.1.0",
     "sinon": "1",
-    "sinon-chai": "2"
+    "sinon-chai": "2",
+    "test-peer-range": "~1.0.1"
   },
   "keywords": [
     "hapi",

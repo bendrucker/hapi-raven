@@ -6,8 +6,11 @@ var hapi   = require('hapi');
 var raven  = require('raven');
 var sinon  = require('sinon');
 var boom   = require('boom');
+var semver = require('semver');
 
 /* globals describe:false, beforeEach:false, afterEach:false, it:false */
+
+var hapiVersion = semver.major(require('hapi/package.json').version)
 
 describe('hapi-raven', function () {
 
@@ -67,7 +70,7 @@ describe('hapi-raven', function () {
         method: 'get',
         path: '/',
         query: {},
-        remoteAddress: '127.0.0.1',
+        remoteAddress: hapiVersion === 8 ? '' : '127.0.0.1',
         userAgent: 'shot'
       }));
       raven.Client.restore();
