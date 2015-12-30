@@ -1,6 +1,12 @@
 language: node_js
 node_js:
 - '0.10'
+- '4'
+- '5'
+before_script:
+  - chmod +x ./run-tests.sh
+script:
+  - ./run-tests.sh
 deploy:
   provider: npm
   email: bvdrucker@gmail.com
