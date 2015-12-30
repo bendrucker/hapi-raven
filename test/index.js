@@ -6,6 +6,11 @@ var hapi   = require('hapi');
 var raven  = require('raven');
 var sinon  = require('sinon');
 var boom   = require('boom');
+var semver = require('semver');
+
+// Since we test the plugin with different versions of hapi, which behave a bit differently, we need
+// to determine the installed version
+var hapiMajorVersion = semver.major(require('hapi/package.json').version);
 
 /* globals describe:false, beforeEach:false, afterEach:false, it:false */
 
@@ -67,7 +72,7 @@ describe('hapi-raven', function () {
         method: 'get',
         path: '/',
         query: {},
-        remoteAddress: '',
+        remoteAddress: hapiMajorVersion === 8 ? '' : '127.0.0.1',
         userAgent: 'shot'
       }));
       raven.Client.restore();

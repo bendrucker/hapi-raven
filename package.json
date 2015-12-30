@@ -21,6 +21,7 @@
     "chai": "1",
     "hapi": "8",
     "mocha": "1",
+    "semver": "^5.1.0",
     "sinon": "1",
     "sinon-chai": "2"
   },
