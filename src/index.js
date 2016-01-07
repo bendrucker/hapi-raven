@@ -15,7 +15,8 @@ exports.register = function (server, options, next) {
         query: request.query,
         remoteAddress: request.info.remoteAddress,
         userAgent: request.raw.req.headers['user-agent']
-      }
+      },
+      tags: options.tags
     });
   });
 

@@ -9,6 +9,7 @@ Options:
 
 * **`dsn`**: Your Sentry DSN (required)
 * **`client`**: An options object that will be passed directly to the client as its second argument (optional)
+* **`tags`**: An array of tags (strings) to apply to each captured error
 
 Note that DSN configuration using `process.env` is not supported. If you wish to replicate the [default environment variable behavior](https://github.com/getsentry/raven-node/blob/master/lib/client.js#L21), you'll need to supply the value directly:
 
