@@ -88,4 +88,19 @@ describe('hapi-raven', function () {
     });
   });
 
+  it('passes tags to Raven client', function (done) {
+    var capture = sinon.spy();
+    sinon.stub(raven, 'Client').returns({
+      captureError: capture
+    });
+    register({
+      tags: ['tag']
+    });
+    server.inject('/', function () {
+      expect(capture).to.have.been.calledWith(error, sinon.match.has('tags', ['tag']));
+      raven.Client.restore();
+      done();
+    });
+  });
+
 });
