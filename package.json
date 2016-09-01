@@ -20,7 +20,7 @@
   "devDependencies": {
     "boom": "~4.0.0",
     "chai": "3.5.0",
-    "hapi": "^15.0.0",
+    "hapi": "^15.0.3",
     "mocha": "^3.0.0",
     "semver": "~5.3.0",
     "sinon": "1",
