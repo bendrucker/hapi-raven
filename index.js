@@ -7,14 +7,17 @@ exports.register = function (server, options, next) {
   server.expose('client', client)
   server.on('request-error', function (request, err) {
     client.captureException(err, {
+      request: {
+        method: request.method,
+        url: request.info.uri + request.path,
+        query_string: request.query,
+        headers: request.headers,
+        cookies: request.state,
+      },
       extra: {
         timestamp: request.info.received,
         id: request.id,
-        method: request.method,
-        path: request.path,
-        query: request.query,
         remoteAddress: request.info.remoteAddress,
-        userAgent: request.raw.req.headers['user-agent']
       },
       tags: options.tags
     })
