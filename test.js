@@ -28,7 +28,7 @@ test('options', function (t) {
 })
 
 test('request-error', function (t) {
-  t.plan(10)
+  t.plan(11)
 
   var server = Server()
   var plugin = proxyquire('./', {
@@ -40,11 +40,12 @@ test('request-error', function (t) {
             t.ok(data.extra)
             t.equal(typeof data.extra.timestamp, 'number')
             t.equal(typeof data.extra.id, 'string')
-            t.equal(data.extra.method, 'get')
-            t.equal(data.extra.path, '/')
-            t.deepEqual(data.extra.query, {})
+            t.equal(data.request.method, 'get')
+            t.ok(/^http:\/\/.+:0\/$/.test(data.request.url))
+            t.deepEqual(data.request.query_string, {})
+            t.ok(data.request.headers['user-agent'])
+            t.deepEqual(data.request.cookies, {})
             t.equal(data.extra.remoteAddress, hapiVersion === 8 ? '' : '127.0.0.1')
-            t.equal(data.extra.userAgent, 'shot')
           }
         }
       }
