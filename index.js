@@ -6,7 +6,7 @@ exports.register = function (server, options, next) {
   var client = new raven.Client(options.dsn, options.client)
   server.expose('client', client)
   server.on('request-error', function (request, err) {
-    (client.captureException || client.captureError).call(client, err, {
+    client.captureException(err, {
       extra: {
         timestamp: request.info.received,
         id: request.id,
