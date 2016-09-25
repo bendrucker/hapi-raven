@@ -19,7 +19,7 @@ server.register({
   options: {
     dsn: process.env.SENTRY_DSN
   }
-});
+})
 ```
 
 ## Usage
@@ -37,13 +37,13 @@ server.route({
   method: 'GET',
   path: '/',
   handler: function (request, reply) {
-    reply(Hapi.error.notFound());
+    reply(Hapi.error.notFound())
   }
-});
+})
 
 server.inject('/', function (response) {
   // nothing was logged
-});
+})
 ```
 
 #### 500 Errors are Logged
@@ -53,13 +53,13 @@ server.route({
   method: 'GET',
   path: '/throw',
   handler: function (request, reply) {
-    throw new Error();
+    throw new Error()
   }
-});
+})
 
 server.inject('/throw', function (response) {
   // thrown error is logged to Sentry
-});
+})
 ```
 
 ```js
@@ -67,13 +67,13 @@ server.route({
   method: 'GET',
   path: '/reply',
   handler: function (request, reply) {
-    reply(new Error());
+    reply(new Error())
   }
-});
+})
 
 server.inject('/throw', function (response) {
   // passed error is logged to Sentry
-});
+})
 ```
 
 -------------------------
@@ -84,7 +84,7 @@ For convenience, hapi-raven [exposes](http://hapijs.com/api#pluginexposekey-valu
 ```js
 server.ext('onPreResponse', function (request, reply) {
   if (request.isBoom && request.response.statusCode === 404) {
-    server.plugins.raven.client.captureError(request.response);
+    server.plugins.raven.client.captureError(request.response)
   }
-});
+})
 ```

@@ -1,10 +1,10 @@
-'use strict';
+'use strict'
 
-var raven  = require('raven');
+var raven = require('raven')
 
 exports.register = function (server, options, next) {
-  var client = new raven.Client(options.dsn, options.client);
-  server.expose('client', client);
+  var client = new raven.Client(options.dsn, options.client)
+  server.expose('client', client)
   server.on('request-error', function (request, err) {
     (client.captureException || client.captureError).call(client, err, {
       extra: {
@@ -17,12 +17,12 @@ exports.register = function (server, options, next) {
         userAgent: request.raw.req.headers['user-agent']
       },
       tags: options.tags
-    });
-  });
+    })
+  })
 
-  next();
-};
+  next()
+}
 
 exports.register.attributes = {
-  pkg: require('../package')
-};
+  pkg: require('./package.json')
+}
