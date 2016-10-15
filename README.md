@@ -1,7 +1,7 @@
 hapi-raven [![Build Status](https://travis-ci.org/bendrucker/hapi-raven.svg?branch=master)](https://travis-ci.org/bendrucker/hapi-raven)
 ==========
 
-A Hapi plugin for sending exceptions to Sentry through Raven. 
+A Hapi plugin for sending exceptions to Sentry through Raven.
 
 ## Setup
 
@@ -24,9 +24,9 @@ server.register({
 
 ## Usage
 
-Once you register the plugin on a server, logging will happen automatically. 
+Once you register the plugin on a server, logging will happen automatically.
 
-The plugin listens for [`'request-error'` events](http://hapijs.com/api#server-events) which are emitted any time `reply` is called with an error where `err.isBoom === false`. Note that the `'request-error'` event is emitted for all thrown exceptions and passed errors that are not Boom errors. Transforming an error at an extension point (e.g. `'onPostHandler'` or `'onPreResponse'`) into a Boom error will not prevent the event from being emitted on response. 
+The plugin listens for [`'request-error'` events](http://hapijs.com/api#server-events) which are emitted any time `reply` is called with an error where `err.isBoom === false`. Note that the `'request-error'` event is emitted for all thrown exceptions and passed errors that are not Boom errors. Transforming an error at an extension point (e.g. `'onPostHandler'` or `'onPreResponse'`) into a Boom error will not prevent the event from being emitted on response.
 
 --------------
 
@@ -76,15 +76,29 @@ server.inject('/throw', function (response) {
 })
 ```
 
+#### Registering User Context
+To register [user context](https://docs.sentry.io/clients/javascript/#adding-context) with raven call the `setUserContext` function passing user details.
+
+```javascript
+server.plugins['hapi-raven'].client.setUserContext({ email: sample@example.com, id: 1})
+```
+To remove user context on logout call setUserContext with no arg
+
+```javascript
+server.plugins['hapi-raven'].client.setUserContext()
+```
+
+Full Raven JS reference can be found [here](https://docs.sentry.io/clients/javascript/#adding-context)
+
 -------------------------
 
-For convenience, hapi-raven [exposes](http://hapijs.com/api#pluginexposekey-value) the `node-raven` client on your server as `server.plugins.raven.client`. If you want to capture errors other than those raised by `'request-error'`, you can use the client directly inside an [`'onPreResponse'`](http://hapijs.com/api#error-transformation) extension point.
+For convenience, hapi-raven [exposes](http://hapijs.com/api#pluginexposekey-value) the `node-raven` client on your server as `server.plugins['hapi-raven'].client`. If you want to capture errors other than those raised by `'request-error'`, you can use the client directly inside an [`'onPreResponse'`](http://hapijs.com/api#error-transformation) extension point.
 
 ### Example: Capture all 404 errors
 ```js
 server.ext('onPreResponse', function (request, reply) {
   if (request.isBoom && request.response.statusCode === 404) {
-    server.plugins.raven.client.captureError(request.response)
+    server.plugins['hapi-raven'].client.captureError(request.response)
   }
 })
 ```
