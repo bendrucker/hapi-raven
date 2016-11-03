@@ -8,10 +8,7 @@ exports.register = function (server, options, next) {
   server.on('request-error', function (request, err) {
 
     var baseUrl = request.info.uri;
-    if (baseUrl === undefined) {
-      if (request.info.host) baseUrl = server.info.protocol + '://' + request.info.host;
-      else baseUrl = server.info.uri;
-    }
+    baseUrl = baseUrl || request.info.host && `${server.info.protocol}://${request.info.host}` || server.info.uri;
 
     client.captureException(err, {
       request: {
