@@ -16,10 +16,10 @@ exports.register = function (server, options, next) {
     client.captureException(err, {
       request: {
         method: request.method,
-        url: baseUrl + request.path,
         query_string: request.query,
         headers: request.headers,
         cookies: request.state,
+        url: baseUrl + request.path,
       },
       extra: {
         timestamp: request.info.received,
