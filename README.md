@@ -78,13 +78,13 @@ server.inject('/throw', function (response) {
 
 -------------------------
 
-For convenience, hapi-raven [exposes](http://hapijs.com/api#pluginexposekey-value) the `node-raven` client on your server as `server.plugins.raven.client`. If you want to capture errors other than those raised by `'request-error'`, you can use the client directly inside an [`'onPreResponse'`](http://hapijs.com/api#error-transformation) extension point.
+For convenience, hapi-raven [exposes](http://hapijs.com/api#pluginexposekey-value) the `node-raven` client on your server as `server.plugins['hapi-raven'].client`. If you want to capture errors other than those raised by `'request-error'`, you can use the client directly inside an [`'onPreResponse'`](http://hapijs.com/api#error-transformation) extension point.
 
 ### Example: Capture all 404 errors
 ```js
 server.ext('onPreResponse', function (request, reply) {
   if (request.isBoom && request.response.statusCode === 404) {
-    server.plugins.raven.client.captureError(request.response)
+    server.plugins['hapi-raven'].client.captureError(request.response)
   }
 })
 ```
