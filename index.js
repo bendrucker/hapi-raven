@@ -6,15 +6,22 @@ exports.register = function (server, options, next) {
   var client = new raven.Client(options.dsn, options.client)
   server.expose('client', client)
   server.on('request-error', function (request, err) {
+
+    var baseUrl = request.info.uri;
+    baseUrl = baseUrl || request.info.host && `${server.info.protocol}://${request.info.host}` || server.info.uri;
+
     client.captureException(err, {
+      request: {
+        method: request.method,
+        query_string: request.query,
+        headers: request.headers,
+        cookies: request.state,
+        url: baseUrl + request.path,
+      },
       extra: {
         timestamp: request.info.received,
         id: request.id,
-        method: request.method,
-        path: request.path,
-        query: request.query,
         remoteAddress: request.info.remoteAddress,
-        userAgent: request.raw.req.headers['user-agent']
       },
       tags: options.tags
     })
