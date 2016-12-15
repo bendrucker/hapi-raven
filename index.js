@@ -8,6 +8,7 @@ exports.register = function (server, options, next) {
   server.on('request-error', function (request, err) {
     var baseUrl = request.info.uri ||
       request.info.host && `${server.info.protocol}://${request.info.host}` ||
+      /* istanbul ignore next */
       server.info.uri
 
     Raven.captureException(err, {
