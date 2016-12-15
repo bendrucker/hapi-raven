@@ -1,16 +1,16 @@
 'use strict'
 
-var raven = require('raven')
+var Raven = require('raven')
 
 exports.register = function (server, options, next) {
-  var client = new raven.Client(options.dsn, options.client)
-  server.expose('client', client)
+  Raven.config(options.dsn, options.client)
+  server.expose('client', Raven)
   server.on('request-error', function (request, err) {
     var baseUrl = request.info.uri ||
       request.info.host && `${server.info.protocol}://${request.info.host}` ||
       server.info.uri
 
-    client.captureException(err, {
+    Raven.captureException(err, {
       request: {
         method: request.method,
         query_string: request.query,

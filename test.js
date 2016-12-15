@@ -14,7 +14,7 @@ test('options', function (t) {
   var server = Server()
   var plugin = proxyquire('./', {
     raven: {
-      Client: function (dsn, options) {
+      config: function testConfig (dsn, options) {
         t.equal(dsn, 'dsn')
         t.deepEqual(options, {foo: 'bar'})
       }
@@ -33,21 +33,18 @@ test('request-error', function (t) {
   var server = Server()
   var plugin = proxyquire('./', {
     raven: {
-      Client: function (dsn, options) {
-        return {
-          captureException: function (err, data) {
-            t.equal(err.message, 'unexpected')
-            t.ok(data.extra)
-            t.equal(typeof data.extra.timestamp, 'number')
-            t.equal(typeof data.extra.id, 'string')
-            t.equal(data.request.method, 'get')
-            t.ok(/^http:\/\/.+:0\/$/.test(data.request.url))
-            t.deepEqual(data.request.query_string, {})
-            t.ok(data.request.headers['user-agent'])
-            t.deepEqual(data.request.cookies, {})
-            t.equal(data.extra.remoteAddress, hapiVersion === 8 ? '' : '127.0.0.1')
-          }
-        }
+      config: function () {},
+      captureException: function testCapture (err, data) {
+        t.equal(err.message, 'unexpected')
+        t.ok(data.extra)
+        t.equal(typeof data.extra.timestamp, 'number')
+        t.equal(typeof data.extra.id, 'string')
+        t.equal(data.request.method, 'get')
+        t.ok(/^http:\/\/.+:0\/$/.test(data.request.url))
+        t.deepEqual(data.request.query_string, {})
+        t.ok(data.request.headers['user-agent'])
+        t.deepEqual(data.request.cookies, {})
+        t.equal(data.extra.remoteAddress, hapiVersion === 8 ? '' : '127.0.0.1')
       }
     }
   })
@@ -65,11 +62,8 @@ test('boom error', function (t) {
   var server = Server()
   var plugin = proxyquire('./', {
     raven: {
-      Client: function (dsn, options) {
-        return {
-          captureException: t.fail
-        }
-      }
+      config: function () {},
+      captureException: t.fail
     }
   })
 
@@ -86,13 +80,10 @@ test('tags', function (t) {
   var server = Server()
   var plugin = proxyquire('./', {
     raven: {
-      Client: function (dsn, options) {
-        return {
-          captureException: function (err, data) {
-            t.ok(err)
-            t.deepEqual(data.tags, ['beep'])
-          }
-        }
+      config: function () {},
+      captureException: function testCapture (err, data) {
+        t.ok(err)
+        t.deepEqual(data.tags, ['beep'])
       }
     }
   })
