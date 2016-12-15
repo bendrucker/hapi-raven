@@ -40,7 +40,13 @@ test('request-error', function (t) {
         t.equal(typeof data.extra.timestamp, 'number')
         t.equal(typeof data.extra.id, 'string')
         t.equal(data.request.method, 'get')
-        t.ok(/^http:\/\/.+:0\/$/.test(data.request.url))
+
+        if (hapiVersion === 8) {
+          t.ok(/^http:\/\/.+\/$/.test(data.request.url))
+        } else {
+          t.ok(/^http:\/\/.+:0\/$/.test(data.request.url))
+        }
+
         t.deepEqual(data.request.query_string, {})
         t.ok(data.request.headers['user-agent'])
         t.deepEqual(data.request.cookies, {})
