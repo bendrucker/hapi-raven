@@ -1,7 +1,7 @@
 hapi-raven [![Build Status](https://travis-ci.org/bendrucker/hapi-raven.svg?branch=master)](https://travis-ci.org/bendrucker/hapi-raven)
 ==========
 
-A Hapi plugin for sending exceptions to Sentry through Raven. 
+A Hapi plugin for sending exceptions to Sentry through Raven.
 
 ## Setup
 
@@ -24,9 +24,9 @@ server.register({
 
 ## Usage
 
-Once you register the plugin on a server, logging will happen automatically. 
+Once you register the plugin on a server, logging will happen automatically.
 
-The plugin listens for [`'request-error'` events](http://hapijs.com/api#server-events) which are emitted any time `reply` is called with an error where `err.isBoom === false`. Note that the `'request-error'` event is emitted for all thrown exceptions and passed errors that are not Boom errors. Transforming an error at an extension point (e.g. `'onPostHandler'` or `'onPreResponse'`) into a Boom error will not prevent the event from being emitted on response. 
+The plugin listens for [`'request-error'` events](http://hapijs.com/api#server-events) which are emitted any time `reply` is called with an error where `err.isBoom === false`. Note that the `'request-error'` event is emitted for all thrown exceptions and passed errors that are not Boom errors. Transforming an error at an extension point (e.g. `'onPostHandler'` or `'onPreResponse'`) into a Boom error will not prevent the event from being emitted on response.
 
 --------------
 
@@ -75,6 +75,20 @@ server.inject('/throw', function (response) {
   // passed error is logged to Sentry
 })
 ```
+
+#### Registering User Context
+To register [user context](https://docs.sentry.io/clients/javascript/#adding-context) with raven call the `setUserContext` function passing user details.
+
+```javascript
+server.plugins['hapi-raven'].client.setUserContext({ email: sample@example.com, id: 1})
+```
+To remove user context on logout call setUserContext with no arg
+
+```javascript
+server.plugins['hapi-raven'].client.setUserContext()
+```
+
+Full Raven JS reference can be found [here](https://docs.sentry.io/clients/javascript/#adding-context)
 
 -------------------------
 
