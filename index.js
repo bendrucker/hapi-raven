@@ -3,7 +3,7 @@
 var Raven = require('raven')
 
 exports.register = function (server, options, next) {
-  Raven.config(options.dsn, options.client)
+  Raven.config(options.dsn, options.client).install()
   server.expose('client', Raven)
   server.on('request-error', function (request, err) {
     var baseUrl = request.info.uri ||
