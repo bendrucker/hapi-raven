@@ -13,7 +13,7 @@
     "coverage": "100 npm run test-main"
   },
   "dependencies": {
-    "raven": "~1.1.1"
+    "raven": "^2.1.0"
   },
   "peerDependencies": {
     "hapi": ">=8 <17"
