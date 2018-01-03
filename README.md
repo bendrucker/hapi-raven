@@ -15,7 +15,7 @@ Note that DSN configuration using `process.env` is not supported. If you wish to
 
 ```js
 server.register({
-  register: require('hapi-raven'),
+  plugin: require('hapi-raven'),
   options: {
     dsn: process.env.SENTRY_DSN
   }
@@ -26,7 +26,7 @@ server.register({
 
 Once you register the plugin on a server, logging will happen automatically. 
 
-The plugin listens for [`'request-error'` events](http://hapijs.com/api#server-events) which are emitted any time `reply` is called with an error where `err.isBoom === false`. Note that the `'request-error'` event is emitted for all thrown exceptions and passed errors that are not Boom errors. Transforming an error at an extension point (e.g. `'onPostHandler'` or `'onPreResponse'`) into a Boom error will not prevent the event from being emitted on response. 
+The plugin listens for [`'request-error'` events](http://hapijs.com/api#server-events) which are emitted any time when hapi replies is called with an error where `err.isBoom === false`. Note that the `'request-error'` event is emitted for all thrown exceptions and passed errors that are not Boom errors. Transforming an error at an extension point (e.g. `'onPostHandler'` or `'onPreResponse'`) into a Boom error will not prevent the event from being emitted on response.
 
 --------------
 
@@ -36,8 +36,8 @@ The plugin listens for [`'request-error'` events](http://hapijs.com/api#server-e
 server.route({
   method: 'GET',
   path: '/',
-  handler: function (request, reply) {
-    reply(Hapi.error.notFound())
+  handler: function (request, h) {
+    return Hapi.error.notFound()
   }
 })
 
@@ -52,7 +52,7 @@ server.inject('/', function (response) {
 server.route({
   method: 'GET',
   path: '/throw',
-  handler: function (request, reply) {
+  handler: function (request, h) {
     throw new Error()
   }
 })
@@ -66,8 +66,8 @@ server.inject('/throw', function (response) {
 server.route({
   method: 'GET',
   path: '/reply',
-  handler: function (request, reply) {
-    reply(new Error())
+  handler: function (request, h) {
+    return new Error()
   }
 })
 
@@ -82,9 +82,10 @@ For convenience, hapi-raven [exposes](http://hapijs.com/api#pluginexposekey-valu
 
 ### Example: Capture all 404 errors
 ```js
-server.ext('onPreResponse', function (request, reply) {
+server.ext('onPreResponse', function (request, h) {
   if (request.isBoom && request.response.statusCode === 404) {
     server.plugins['hapi-raven'].client.captureError(request.response)
   }
+  h.continue
 })
 ```

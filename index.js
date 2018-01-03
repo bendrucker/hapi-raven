@@ -2,16 +2,16 @@
 
 var Raven = require('raven')
 
-exports.register = function (server, options, next) {
+var register = function (server, options) {
   Raven.config(options.dsn, options.client)
   server.expose('client', Raven)
-  server.on('request-error', function (request, err) {
+  server.events.on({ name: 'request', channels: 'error' }, function (request, event, tags) {
     var baseUrl = request.info.uri ||
       request.info.host && `${server.info.protocol}://${request.info.host}` ||
       /* istanbul ignore next */
       server.info.uri
 
-    Raven.captureException(err, {
+    Raven.captureException(event.error, {
       request: {
         method: request.method,
         query_string: request.query,
@@ -27,10 +27,9 @@ exports.register = function (server, options, next) {
       tags: options.tags
     })
   })
-
-  next()
 }
 
-exports.register.attributes = {
-  pkg: require('./package.json')
+exports.plugin = {
+  pkg: require('./package.json'),
+  register,
 }
