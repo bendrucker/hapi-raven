@@ -8,9 +8,9 @@
     "url": "https://github.com/bendrucker/hapi-raven.git"
   },
   "scripts": {
-    "test": "standard && test-peer-range hapi",
-    "test-main": "tape test.js",
-    "coverage": "100 npm run test-main"
+    "lint": "standard",
+    "test": "npm run lint && tape test.js",
+    "coverage": "100 npm test"
   },
   "dependencies": {
     "raven": "^2.1.0"
