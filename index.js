@@ -2,16 +2,16 @@
 
 const raven = require('raven')
 
-exports.register = (server, options) => {
+exports.register = function (server, options) {
   raven.config(options.dsn, options.client)
   server.expose('client', raven)
-  server.events.on({ name: 'request', channels: 'error' }, (request, { error }) => {
+  server.events.on({name: 'request', channels: 'error'}, function (request, event) {
     const baseUrl = request.info.uri ||
       (request.info.host && `${server.info.protocol}://${request.info.host}`) ||
       /* istanbul ignore next */
       server.info.uri
 
-    raven.captureException(error, {
+    raven.captureException(event.error, {
       request: {
         method: request.method,
         query_string: request.query,
@@ -29,4 +29,4 @@ exports.register = (server, options) => {
   })
 }
 
-exports.name = 'hapi-raven'
+exports.name = require('./package.json').name

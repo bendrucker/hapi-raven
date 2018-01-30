@@ -3,17 +3,9 @@
 const test = require('tape')
 const hapi = require('hapi')
 const boom = require('boom')
-const semver = require('semver')
 const proxyquire = require('proxyquire')
 
-test('hapi version 17', t => {
-  t.plan(1)
-
-  const hapiVersion = semver.major(require('hapi/package.json').version)
-  t.ok(hapiVersion >= 17)
-})
-
-test('options', t => {
+test('options', async function (t) {
   t.plan(2)
 
   const server = Server()
@@ -26,13 +18,13 @@ test('options', t => {
     }
   })
 
-  register(server, plugin, {
+  await register(server, plugin, {
     dsn: 'dsn',
     client: { foo: 'bar' }
   })
 })
 
-test('request-error', async t => {
+test('request-error', async function (t) {
   t.plan(11)
 
   const server = Server()
@@ -55,13 +47,13 @@ test('request-error', async t => {
     }
   })
 
-  register(server, plugin, {})
+  await register(server, plugin, {})
 
   const response = await server.inject('/')
   t.equal(response.statusCode, 500)
 })
 
-test('boom error', async t => {
+test('boom error', async function (t) {
   t.plan(1)
 
   const server = Server()
@@ -73,13 +65,13 @@ test('boom error', async t => {
     }
   })
 
-  register(server, plugin, {})
+  await register(server, plugin, {})
 
   const response = await server.inject('/boom')
   t.equal(response.statusCode, 403)
 })
 
-test('tags', async t => {
+test('tags', async function (t) {
   t.plan(3)
 
   const server = Server()
@@ -94,7 +86,7 @@ test('tags', async t => {
     }
   })
 
-  register(server, plugin, { tags: ['beep'] })
+  await register(server, plugin, { tags: ['beep'] })
 
   const response = await server.inject('/')
   t.equal(response.statusCode, 500)
@@ -123,7 +115,9 @@ function Server () {
   return server
 }
 
-const register = (server, plugin, options) => server.register({
-  plugin,
-  options
-})
+function register (server, plugin, options) {
+  return server.register({
+    plugin,
+    options
+  })
+}

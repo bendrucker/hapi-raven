@@ -8,15 +8,15 @@
     "url": "https://github.com/bendrucker/hapi-raven.git"
   },
   "scripts": {
-    "lint": "standard",
-    "test": "npm run lint && tape test.js",
-    "coverage": "100 npm test"
+    "test": "standard",
+    "test-main": "tape test.js",
+    "coverage": "100 npm run test-main"
   },
   "dependencies": {
     "raven": "^2.1.0"
   },
   "peerDependencies": {
-    "hapi": ">=17"
+    "hapi": ">=17 <18"
   },
   "devDependencies": {
     "assert-100": "^1.1.0",
@@ -24,7 +24,6 @@
     "hapi": "^17.2.0",
     "nyc": "^11.4.1",
     "proxyquire": "^1.7.10",
-    "semver": "^5.3.0",
     "standard": "^10.0.3",
     "tape": "^4.6.0",
     "test-peer-range": "^1.0.1"
