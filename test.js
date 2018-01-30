@@ -1,136 +1,129 @@
 'use strict'
 
-var test = require('tape')
-var hapi = require('hapi')
-var boom = require('boom')
-var semver = require('semver')
-var proxyquire = require('proxyquire')
+const test = require('tape')
+const hapi = require('hapi')
+const boom = require('boom')
+const semver = require('semver')
+const proxyquire = require('proxyquire')
 
-var hapiVersion = semver.major(require('hapi/package.json').version)
+test('hapi version 17', t => {
+  t.plan(1)
 
-test('options', function (t) {
+  const hapiVersion = semver.major(require('hapi/package.json').version)
+  t.ok(hapiVersion >= 17)
+})
+
+test('options', t => {
   t.plan(2)
 
-  var server = Server()
-  var plugin = proxyquire('./', {
+  const server = Server()
+  const plugin = proxyquire('./', {
     raven: {
-      config: function testConfig (dsn, options) {
+      config (dsn, options) {
         t.equal(dsn, 'dsn')
-        t.deepEqual(options, {foo: 'bar'})
+        t.deepEqual(options, { foo: 'bar' })
       }
     }
   })
 
   register(server, plugin, {
     dsn: 'dsn',
-    client: {foo: 'bar'}
+    client: { foo: 'bar' }
   })
 })
 
-test('request-error', function (t) {
+test('request-error', async t => {
   t.plan(11)
 
-  var server = Server()
-  var plugin = proxyquire('./', {
+  const server = Server()
+  const plugin = proxyquire('./', {
     raven: {
-      config: function () {},
-      captureException: function testCapture (err, data) {
+      config () {
+      },
+      captureException (err, data) {
         t.equal(err.message, 'unexpected')
+        t.equal(err.output.statusCode, 500)
         t.ok(data.extra)
         t.equal(typeof data.extra.timestamp, 'number')
-        t.equal(typeof data.extra.id, 'string')
         t.equal(data.request.method, 'get')
-
-        if (hapiVersion === 8) {
-          t.ok(/^http:\/\/.+\/$/.test(data.request.url))
-        } else {
-          t.ok(/^http:\/\/.+:0\/$/.test(data.request.url))
-        }
-
+        t.ok(/^http:\/\/.+:0\/$/.test(data.request.url))
         t.deepEqual(data.request.query_string, {})
         t.ok(data.request.headers['user-agent'])
         t.deepEqual(data.request.cookies, {})
-        t.equal(data.extra.remoteAddress, hapiVersion === 8 ? '' : '127.0.0.1')
+        t.equal(data.extra.remoteAddress, '127.0.0.1')
       }
     }
   })
 
   register(server, plugin, {})
 
-  server.inject('/', function (response) {
-    t.equal(response.statusCode, 500)
-  })
+  const response = await server.inject('/')
+  t.equal(response.statusCode, 500)
 })
 
-test('boom error', function (t) {
+test('boom error', async t => {
   t.plan(1)
 
-  var server = Server()
-  var plugin = proxyquire('./', {
+  const server = Server()
+  const plugin = proxyquire('./', {
     raven: {
-      config: function () {},
+      config () {
+      },
       captureException: t.fail
     }
   })
 
   register(server, plugin, {})
 
-  server.inject('/boom', function (response) {
-    t.equal(response.statusCode, 403)
-  })
+  const response = await server.inject('/boom')
+  t.equal(response.statusCode, 403)
 })
 
-test('tags', function (t) {
+test('tags', async t => {
   t.plan(3)
 
-  var server = Server()
-  var plugin = proxyquire('./', {
+  const server = Server()
+  const plugin = proxyquire('./', {
     raven: {
-      config: function () {},
-      captureException: function testCapture (err, data) {
+      config () {
+      },
+      captureException (err, data) {
         t.ok(err)
         t.deepEqual(data.tags, ['beep'])
       }
     }
   })
 
-  register(server, plugin, {tags: ['beep']})
+  register(server, plugin, { tags: ['beep'] })
 
-  server.inject('/', function (response) {
-    t.equal(response.statusCode, 500)
-  })
+  const response = await server.inject('/')
+  t.equal(response.statusCode, 500)
 })
 
 function Server () {
-  var server = new hapi.Server()
-  server.connection()
+  const server = hapi.server()
 
   server.route({
     method: 'GET',
     path: '/',
-    handler: function (request, reply) {
-      reply(new Error('unexpected'))
+    handler () {
+      throw new Error('unexpected')
     }
   })
 
   server.route({
     method: 'GET',
     path: '/boom',
-    handler: function (request, reply) {
-      reply(boom.forbidden())
+    handler () {
+      throw boom.forbidden()
     }
   })
 
+  server.initialize()
   return server
 }
 
-function register (server, plugin, options) {
-  server.register({
-    register: plugin,
-    options: options || {
-      dsn: 'dsn'
-    }
-  }, function (err) {
-    if (err) throw err
-  })
-}
+const register = (server, plugin, options) => server.register({
+  plugin,
+  options
+})
