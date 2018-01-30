@@ -16,16 +16,16 @@
     "raven": "^2.1.0"
   },
   "peerDependencies": {
-    "hapi": ">=8 <17"
+    "hapi": ">=17"
   },
   "devDependencies": {
     "assert-100": "^1.1.0",
-    "boom": "^4.0.0",
-    "hapi": "^16.0.1",
-    "nyc": "^10.0.0",
+    "boom": "^7.1.1",
+    "hapi": "^17.2.0",
+    "nyc": "^11.4.1",
     "proxyquire": "^1.7.10",
     "semver": "^5.3.0",
-    "standard": "^8.2.0",
+    "standard": "^10.0.3",
     "tape": "^4.6.0",
     "test-peer-range": "^1.0.1"
   },
