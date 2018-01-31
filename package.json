@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "standard",
-    "test-main": "tape test.js",
+    "test-main": "blue-tape test.js",
     "coverage": "100 npm run test-main"
   },
   "dependencies": {
@@ -20,12 +20,12 @@
   },
   "devDependencies": {
     "assert-100": "^1.1.0",
+    "blue-tape": "^1.0.0",
     "boom": "^7.1.1",
     "hapi": "^17.2.0",
     "nyc": "^11.4.1",
     "proxyquire": "^1.7.10",
     "standard": "^10.0.3",
-    "tape": "^4.6.0",
     "test-peer-range": "^1.0.1"
   },
   "keywords": [

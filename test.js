@@ -1,6 +1,6 @@
 'use strict'
 
-const test = require('tape')
+const test = require('blue-tape')
 const hapi = require('hapi')
 const boom = require('boom')
 const proxyquire = require('proxyquire')
@@ -38,7 +38,7 @@ test('request-error', async function (t) {
         t.ok(data.extra)
         t.equal(typeof data.extra.timestamp, 'number')
         t.equal(data.request.method, 'get')
-        t.ok(/^http:\/\/.+:0\/$/.test(data.request.url))
+        t.equal(data.request.url, 'http://localhost:0/')
         t.deepEqual(data.request.query_string, {})
         t.ok(data.request.headers['user-agent'])
         t.deepEqual(data.request.cookies, {})
@@ -93,7 +93,7 @@ test('tags', async function (t) {
 })
 
 function Server () {
-  const server = hapi.server()
+  const server = hapi.server({host: 'localhost'})
 
   server.route({
     method: 'GET',
