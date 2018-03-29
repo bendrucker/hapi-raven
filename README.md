@@ -15,7 +15,7 @@ Note that DSN configuration using `process.env` is not supported. If you wish to
 
 ```js
 server.register({
-  register: require('hapi-raven'),
+  plugin: require('hapi-raven'),
   options: {
     dsn: process.env.SENTRY_DSN
   }
