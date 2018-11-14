@@ -1,4 +1,4 @@
-hapi-raven [![Build Status](https://travis-ci.org/bendrucker/hapi-raven.svg?branch=master)](https://travis-ci.org/bendrucker/hapi-raven)
+hapi-raven [![Build Status](https://travis-ci.org/bendrucker/hapi-raven.svg?branch=master)](https://travis-ci.org/bendrucker/hapi-raven) [![Greenkeeper badge](https://badges.greenkeeper.io/bendrucker/hapi-raven.svg)](https://greenkeeper.io/)
 ==========
 
 A Hapi plugin for sending exceptions to Sentry through Raven. 
