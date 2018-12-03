@@ -1,6 +1,8 @@
 hapi-raven [![Build Status](https://travis-ci.org/bendrucker/hapi-raven.svg?branch=master)](https://travis-ci.org/bendrucker/hapi-raven) [![Greenkeeper badge](https://badges.greenkeeper.io/bendrucker/hapi-raven.svg)](https://greenkeeper.io/)
 ==========
 
+_**Deprecated:** [`raven`](https://github.com/getsentry/sentry-javascript/tree/master/packages/raven-node) is deprecated in favor of [`@sentry/node`](https://github.com/getsentry/sentry-javascript/tree/master/packages/node). Please switch to [hapi-sentry](https://github.com/hydra-newmedia/hapi-sentry) to use the latest Sentry SDK._
+
 A Hapi plugin for sending exceptions to Sentry through Raven. 
 
 ## Setup
