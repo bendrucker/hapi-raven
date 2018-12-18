@@ -86,7 +86,7 @@ For convenience, hapi-raven [exposes](http://hapijs.com/api#pluginexposekey-valu
 ```js
 server.ext('onPreResponse', function (request, reply) {
   if (request.isBoom && request.response.statusCode === 404) {
-    server.plugins['hapi-raven'].client.captureError(request.response)
+    server.plugins['hapi-raven'].client.captureException(request.response)
   }
 })
 ```
