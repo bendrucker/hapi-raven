@@ -23,7 +23,7 @@
     "blue-tape": "^1.0.0",
     "boom": "^7.1.1",
     "hapi": "^18.1.0",
-    "nyc": "^15.0.0",
+    "nyc": "^15.1.0",
     "proxyquire": "^2.1.0",
     "standard": "^14.0.0",
     "test-peer-range": "^2.0.0"
